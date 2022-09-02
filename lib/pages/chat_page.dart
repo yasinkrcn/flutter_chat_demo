@@ -14,10 +14,10 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/widgets.dart';
-import 'pages.dart';
+import '_exports_pages.dart';
 
 class ChatPage extends StatefulWidget {
-  ChatPage({Key? key, required this.arguments}) : super(key: key);
+  const ChatPage({Key? key, required this.arguments}) : super(key: key);
 
   final ChatPageArguments arguments;
 
@@ -30,7 +30,7 @@ class ChatPageState extends State<ChatPage> {
 
   List<QueryDocumentSnapshot> listMessage = [];
   int _limit = 20;
-  int _limitIncrement = 20;
+  final int _limitIncrement = 20;
   String groupChatId = "";
 
   File? imageFile;
@@ -146,7 +146,7 @@ class ChatPageState extends State<ChatPage> {
       chatProvider.sendMessage(content, type, groupChatId, currentUserId, widget.arguments.peerId);
       listScrollController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
     } else {
-      Fluttertoast.showToast(msg: 'Nothing to send', backgroundColor: ColorConstants.greyColor);
+      Fluttertoast.showToast(msg: 'Nothing to send', backgroundColor: ColorHelper.greyColor);
     }
   }
 
@@ -163,73 +163,117 @@ class ChatPageState extends State<ChatPage> {
                 ? Container(
                     padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                     width: 200,
-                    decoration: BoxDecoration(color: ColorConstants.greyColor2, borderRadius: BorderRadius.circular(8)),
+                    decoration: BoxDecoration(color: ColorHelper.primaryColor, borderRadius: BorderRadius.circular(8)),
                     margin: EdgeInsets.only(bottom: isLastMessageRight(index) ? 20 : 10, right: 10),
-                    child: Text(
-                      messageChat.content,
-                      style: const TextStyle(color: ColorConstants.primaryColor),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          messageChat.content,
+                          style: const TextStyle(color: ColorHelper.white),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Text(
+                            DateFormat('kk:mm').format(
+                              DateTime.fromMillisecondsSinceEpoch(
+                                int.parse(messageChat.timestamp),
+                              ),
+                            ),
+                            style: const TextStyle(color: ColorHelper.white, fontSize: 10),
+                          ),
+                        ),
+                      ],
                     ),
                   )
                 : messageChat.type == TypeMessage.image
                     // Image
                     ? Container(
-                        margin: EdgeInsets.only(bottom: isLastMessageRight(index) ? 20 : 10, right: 10),
-                        child: OutlinedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => FullPhotoPage(
-                                  url: messageChat.content,
+                        height: 225,
+                        width: 200,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: ColorHelper.primaryColor,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(3),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Container(
+                                // margin: const EdgeInsets.all(3),
+                                child: OutlinedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => FullPhotoPage(
+                                          url: messageChat.content,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  style: ButtonStyle(
+                                      padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(0))),
+                                  child: Material(
+                                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                    clipBehavior: Clip.hardEdge,
+                                    child: Image.network(
+                                      messageChat.content,
+                                      loadingBuilder:
+                                          (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                        if (loadingProgress == null) return child;
+                                        return Container(
+                                          decoration: const BoxDecoration(
+                                            color: ColorHelper.greyColor2,
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(8),
+                                            ),
+                                          ),
+                                          width: 200,
+                                          height: 200,
+                                          child: Center(
+                                            child: CircularProgressIndicator(
+                                              color: ColorHelper.themeColor,
+                                              value: loadingProgress.expectedTotalBytes != null
+                                                  ? loadingProgress.cumulativeBytesLoaded /
+                                                      loadingProgress.expectedTotalBytes!
+                                                  : null,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      errorBuilder: (context, object, stackTrace) {
+                                        return Material(
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(8),
+                                          ),
+                                          clipBehavior: Clip.hardEdge,
+                                          child: Image.asset(
+                                            'images/img_not_available.jpeg',
+                                            width: 200,
+                                            height: 200,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        );
+                                      },
+                                      width: 200,
+                                      height: 200,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            );
-                          },
-                          style: ButtonStyle(padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(0))),
-                          child: Material(
-                            borderRadius: const BorderRadius.all(Radius.circular(8)),
-                            clipBehavior: Clip.hardEdge,
-                            child: Image.network(
-                              messageChat.content,
-                              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return Container(
-                                  decoration: const BoxDecoration(
-                                    color: ColorConstants.greyColor2,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(8),
-                                    ),
+                              Text(
+                                DateFormat('kk:mm').format(
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                    int.parse(messageChat.timestamp),
                                   ),
-                                  width: 200,
-                                  height: 200,
-                                  child: Center(
-                                    child: CircularProgressIndicator(
-                                      color: ColorConstants.themeColor,
-                                      value: loadingProgress.expectedTotalBytes != null
-                                          ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                                          : null,
-                                    ),
-                                  ),
-                                );
-                              },
-                              errorBuilder: (context, object, stackTrace) {
-                                return Material(
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(8),
-                                  ),
-                                  clipBehavior: Clip.hardEdge,
-                                  child: Image.asset(
-                                    'images/img_not_available.jpeg',
-                                    width: 200,
-                                    height: 200,
-                                    fit: BoxFit.cover,
-                                  ),
-                                );
-                              },
-                              width: 200,
-                              height: 200,
-                              fit: BoxFit.cover,
-                            ),
+                                ),
+                                style: const TextStyle(color: ColorHelper.white, fontSize: 10),
+                              )
+                            ],
                           ),
                         ),
                       )
@@ -253,11 +297,11 @@ class ChatPageState extends State<ChatPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                children: <Widget>[
+                children: [
                   isLastMessageLeft(index)
                       ? Material(
                           borderRadius: const BorderRadius.all(
-                            Radius.circular(18),
+                            Radius.circular(50),
                           ),
                           clipBehavior: Clip.hardEdge,
                           child: Image.network(
@@ -266,7 +310,7 @@ class ChatPageState extends State<ChatPage> {
                               if (loadingProgress == null) return child;
                               return Center(
                                 child: CircularProgressIndicator(
-                                  color: ColorConstants.themeColor,
+                                  color: ColorHelper.themeColor,
                                   value: loadingProgress.expectedTotalBytes != null
                                       ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
                                       : null,
@@ -277,7 +321,7 @@ class ChatPageState extends State<ChatPage> {
                               return const Icon(
                                 Icons.account_circle,
                                 size: 35,
-                                color: ColorConstants.greyColor,
+                                color: ColorHelper.greyColor,
                               );
                             },
                             width: 35,
@@ -291,7 +335,7 @@ class ChatPageState extends State<ChatPage> {
                           padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                           width: 200,
                           decoration:
-                              BoxDecoration(color: ColorConstants.primaryColor, borderRadius: BorderRadius.circular(8)),
+                              BoxDecoration(color: ColorHelper.primaryColor, borderRadius: BorderRadius.circular(8)),
                           margin: const EdgeInsets.only(left: 10),
                           child: Text(
                             messageChat.content,
@@ -322,7 +366,7 @@ class ChatPageState extends State<ChatPage> {
                                       if (loadingProgress == null) return child;
                                       return Container(
                                         decoration: const BoxDecoration(
-                                          color: ColorConstants.greyColor2,
+                                          color: ColorHelper.greyColor2,
                                           borderRadius: BorderRadius.all(
                                             Radius.circular(8),
                                           ),
@@ -331,7 +375,7 @@ class ChatPageState extends State<ChatPage> {
                                         height: 200,
                                         child: Center(
                                           child: CircularProgressIndicator(
-                                            color: ColorConstants.themeColor,
+                                            color: ColorHelper.themeColor,
                                             value: loadingProgress.expectedTotalBytes != null
                                                 ? loadingProgress.cumulativeBytesLoaded /
                                                     loadingProgress.expectedTotalBytes!
@@ -378,8 +422,7 @@ class ChatPageState extends State<ChatPage> {
                       child: Text(
                         DateFormat('dd MMM kk:mm')
                             .format(DateTime.fromMillisecondsSinceEpoch(int.parse(messageChat.timestamp))),
-                        style:
-                            const TextStyle(color: ColorConstants.greyColor, fontSize: 12, fontStyle: FontStyle.italic),
+                        style: const TextStyle(color: ColorHelper.greyColor, fontSize: 12, fontStyle: FontStyle.italic),
                       ),
                     )
                   : const SizedBox.shrink()
@@ -431,7 +474,7 @@ class ChatPageState extends State<ChatPage> {
       appBar: AppBar(
         title: Text(
           widget.arguments.peerNickname,
-          style: const TextStyle(color: ColorConstants.primaryColor),
+          style: const TextStyle(color: ColorHelper.primaryColor),
         ),
         centerTitle: true,
       ),
@@ -471,7 +514,7 @@ class ChatPageState extends State<ChatPage> {
       width: double.infinity,
       height: 50,
       decoration: const BoxDecoration(
-          border: Border(top: BorderSide(color: ColorConstants.greyColor2, width: 0.5)), color: Colors.white),
+          border: Border(top: BorderSide(color: ColorHelper.greyColor2, width: 0.5)), color: Colors.white),
       child: Row(
         children: [
           // Button send image
@@ -482,18 +525,7 @@ class ChatPageState extends State<ChatPage> {
               child: IconButton(
                 icon: const Icon(Icons.image),
                 onPressed: getImage,
-                color: ColorConstants.primaryColor,
-              ),
-            ),
-          ),
-          Material(
-            color: Colors.white,
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 1),
-              child: IconButton(
-                icon: const Icon(Icons.face),
-                onPressed: getSticker,
-                color: ColorConstants.primaryColor,
+                color: ColorHelper.primaryColor,
               ),
             ),
           ),
@@ -504,11 +536,11 @@ class ChatPageState extends State<ChatPage> {
               onSubmitted: (value) {
                 onSendMessage(textEditingController.text, TypeMessage.text);
               },
-              style: const TextStyle(color: ColorConstants.primaryColor, fontSize: 15),
+              style: const TextStyle(color: ColorHelper.primaryColor, fontSize: 15),
               controller: textEditingController,
               decoration: const InputDecoration.collapsed(
                 hintText: 'Type your message...',
-                hintStyle: TextStyle(color: ColorConstants.greyColor),
+                hintStyle: TextStyle(color: ColorHelper.greyColor),
               ),
               focusNode: focusNode,
             ),
@@ -522,7 +554,7 @@ class ChatPageState extends State<ChatPage> {
               child: IconButton(
                 icon: const Icon(Icons.send),
                 onPressed: () => onSendMessage(textEditingController.text, TypeMessage.text),
-                color: ColorConstants.primaryColor,
+                color: ColorHelper.primaryColor,
               ),
             ),
           ),
@@ -553,7 +585,7 @@ class ChatPageState extends State<ChatPage> {
                 } else {
                   return const Center(
                     child: CircularProgressIndicator(
-                      color: ColorConstants.themeColor,
+                      color: ColorHelper.themeColor,
                     ),
                   );
                 }
@@ -561,7 +593,7 @@ class ChatPageState extends State<ChatPage> {
             )
           : const Center(
               child: CircularProgressIndicator(
-                color: ColorConstants.themeColor,
+                color: ColorHelper.themeColor,
               ),
             ),
     );
