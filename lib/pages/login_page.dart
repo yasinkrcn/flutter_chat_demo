@@ -6,7 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/widgets.dart';
-import 'pages.dart';
+import '_exports_pages.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -36,7 +36,7 @@ class LoginPageState extends State<LoginPage> {
         appBar: AppBar(
           title: Text(
             AppConstants.loginTitle,
-            style: TextStyle(color: ColorConstants.primaryColor),
+            style: TextStyle(color: ColorHelper.primaryColor),
           ),
           centerTitle: true,
         ),

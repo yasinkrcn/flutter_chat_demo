@@ -24,7 +24,7 @@ class SettingsPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           AppConstants.settingsTitle,
-          style: TextStyle(color: ColorConstants.primaryColor),
+          style: TextStyle(color: ColorHelper.primaryColor),
         ),
         centerTitle: true,
       ),
@@ -188,7 +188,7 @@ class SettingsPageStateState extends State<SettingsPageState> {
                                   return const Icon(
                                     Icons.account_circle,
                                     size: 90,
-                                    color: ColorConstants.greyColor,
+                                    color: ColorHelper.greyColor,
                                   );
                                 },
                                 loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
@@ -198,7 +198,7 @@ class SettingsPageStateState extends State<SettingsPageState> {
                                     height: 90,
                                     child: Center(
                                       child: CircularProgressIndicator(
-                                        color: ColorConstants.themeColor,
+                                        color: ColorHelper.themeColor,
                                         value: loadingProgress.expectedTotalBytes != null
                                             ? loadingProgress.cumulativeBytesLoaded /
                                                 loadingProgress.expectedTotalBytes!
@@ -212,7 +212,7 @@ class SettingsPageStateState extends State<SettingsPageState> {
                           : const Icon(
                               Icons.account_circle,
                               size: 90,
-                              color: ColorConstants.greyColor,
+                              color: ColorHelper.greyColor,
                             )
                       : ClipRRect(
                           borderRadius: BorderRadius.circular(45),
@@ -236,18 +236,18 @@ class SettingsPageStateState extends State<SettingsPageState> {
                     child: const Text(
                       'Nickname',
                       style: TextStyle(
-                          fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: ColorConstants.primaryColor),
+                          fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: ColorHelper.primaryColor),
                     ),
                   ),
                   Container(
                     margin: const EdgeInsets.only(left: 30, right: 30),
                     child: Theme(
-                      data: Theme.of(context).copyWith(primaryColor: ColorConstants.primaryColor),
+                      data: Theme.of(context).copyWith(primaryColor: ColorHelper.primaryColor),
                       child: TextField(
                         decoration: const InputDecoration(
                           hintText: 'Sweetie',
                           contentPadding: EdgeInsets.all(5),
-                          hintStyle: TextStyle(color: ColorConstants.greyColor),
+                          hintStyle: TextStyle(color: ColorHelper.greyColor),
                         ),
                         controller: controllerNickname,
                         onChanged: (value) {
@@ -264,18 +264,18 @@ class SettingsPageStateState extends State<SettingsPageState> {
                     child: const Text(
                       'About me',
                       style: TextStyle(
-                          fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: ColorConstants.primaryColor),
+                          fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: ColorHelper.primaryColor),
                     ),
                   ),
                   Container(
                     margin: const EdgeInsets.only(left: 30, right: 30),
                     child: Theme(
-                      data: Theme.of(context).copyWith(primaryColor: ColorConstants.primaryColor),
+                      data: Theme.of(context).copyWith(primaryColor: ColorHelper.primaryColor),
                       child: TextField(
                         decoration: const InputDecoration(
                           hintText: 'Fun, like travel and play PES...',
                           contentPadding: EdgeInsets.all(5),
-                          hintStyle: TextStyle(color: ColorConstants.greyColor),
+                          hintStyle: TextStyle(color: ColorHelper.greyColor),
                         ),
                         controller: controllerAboutMe,
                         onChanged: (value) {
@@ -294,7 +294,7 @@ class SettingsPageStateState extends State<SettingsPageState> {
                 child: TextButton(
                   onPressed: handleUpdateData,
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(ColorConstants.primaryColor),
+                    backgroundColor: MaterialStateProperty.all<Color>(ColorHelper.primaryColor),
                     padding: MaterialStateProperty.all<EdgeInsets>(
                       const EdgeInsets.fromLTRB(30, 10, 30, 10),
                     ),

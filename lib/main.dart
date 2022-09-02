@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants/color_constants.dart';
-import 'pages/pages.dart';
+import 'pages/_exports_pages.dart';
 import 'providers/providers.dart';
 
 void main() async {
@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: AppConstants.appTitle,
         theme: ThemeData(
-          primaryColor: ColorConstants.themeColor,
+          primaryColor: ColorHelper.themeColor,
         ),
         home: SplashPage(),
         debugShowCheckedModeBanner: false,
