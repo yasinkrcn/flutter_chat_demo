@@ -16,22 +16,26 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class SettingsPage extends StatelessWidget {
+  const SettingsPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           AppConstants.settingsTitle,
           style: TextStyle(color: ColorConstants.primaryColor),
         ),
         centerTitle: true,
       ),
-      body: SettingsPageState(),
+      body: const SettingsPageState(),
     );
   }
 }
 
 class SettingsPageState extends StatefulWidget {
+  const SettingsPageState({Key? key}) : super(key: key);
+
   @override
   State createState() => SettingsPageStateState();
 }
@@ -160,16 +164,17 @@ class SettingsPageStateState extends State<SettingsPageState> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: <Widget>[
+      children: [
         SingleChildScrollView(
+          padding: const EdgeInsets.only(left: 15, right: 15),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+            children: [
               // Avatar
               CupertinoButton(
                 onPressed: getImage,
                 child: Container(
-                  margin: EdgeInsets.all(20),
+                  margin: const EdgeInsets.all(20),
                   child: avatarImageFile == null
                       ? photoUrl.isNotEmpty
                           ? ClipRRect(
@@ -180,7 +185,7 @@ class SettingsPageStateState extends State<SettingsPageState> {
                                 width: 90,
                                 height: 90,
                                 errorBuilder: (context, object, stackTrace) {
-                                  return Icon(
+                                  return const Icon(
                                     Icons.account_circle,
                                     size: 90,
                                     color: ColorConstants.greyColor,
@@ -188,7 +193,7 @@ class SettingsPageStateState extends State<SettingsPageState> {
                                 },
                                 loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                                   if (loadingProgress == null) return child;
-                                  return Container(
+                                  return SizedBox(
                                     width: 90,
                                     height: 90,
                                     child: Center(
@@ -204,7 +209,7 @@ class SettingsPageStateState extends State<SettingsPageState> {
                                 },
                               ),
                             )
-                          : Icon(
+                          : const Icon(
                               Icons.account_circle,
                               size: 90,
                               color: ColorConstants.greyColor,
@@ -223,21 +228,23 @@ class SettingsPageStateState extends State<SettingsPageState> {
 
               // Input
               Column(
-                children: <Widget>[
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   // Username
                   Container(
-                    child: Text(
+                    margin: const EdgeInsets.only(left: 10, bottom: 5, top: 10),
+                    child: const Text(
                       'Nickname',
                       style: TextStyle(
                           fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: ColorConstants.primaryColor),
                     ),
-                    margin: EdgeInsets.only(left: 10, bottom: 5, top: 10),
                   ),
                   Container(
+                    margin: const EdgeInsets.only(left: 30, right: 30),
                     child: Theme(
                       data: Theme.of(context).copyWith(primaryColor: ColorConstants.primaryColor),
                       child: TextField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Sweetie',
                           contentPadding: EdgeInsets.all(5),
                           hintStyle: TextStyle(color: ColorConstants.greyColor),
@@ -249,23 +256,23 @@ class SettingsPageStateState extends State<SettingsPageState> {
                         focusNode: focusNodeNickname,
                       ),
                     ),
-                    margin: EdgeInsets.only(left: 30, right: 30),
                   ),
 
                   // About me
                   Container(
-                    child: Text(
+                    margin: const EdgeInsets.only(left: 10, top: 30, bottom: 5),
+                    child: const Text(
                       'About me',
                       style: TextStyle(
                           fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: ColorConstants.primaryColor),
                     ),
-                    margin: EdgeInsets.only(left: 10, top: 30, bottom: 5),
                   ),
                   Container(
+                    margin: const EdgeInsets.only(left: 30, right: 30),
                     child: Theme(
                       data: Theme.of(context).copyWith(primaryColor: ColorConstants.primaryColor),
                       child: TextField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Fun, like travel and play PES...',
                           contentPadding: EdgeInsets.all(5),
                           hintStyle: TextStyle(color: ColorConstants.greyColor),
@@ -277,36 +284,33 @@ class SettingsPageStateState extends State<SettingsPageState> {
                         focusNode: focusNodeAboutMe,
                       ),
                     ),
-                    margin: EdgeInsets.only(left: 30, right: 30),
                   ),
                 ],
-                crossAxisAlignment: CrossAxisAlignment.start,
               ),
 
               // Button
               Container(
+                margin: const EdgeInsets.only(top: 50, bottom: 50),
                 child: TextButton(
                   onPressed: handleUpdateData,
-                  child: Text(
-                    'Update',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  ),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(ColorConstants.primaryColor),
                     padding: MaterialStateProperty.all<EdgeInsets>(
-                      EdgeInsets.fromLTRB(30, 10, 30, 10),
+                      const EdgeInsets.fromLTRB(30, 10, 30, 10),
                     ),
                   ),
+                  child: const Text(
+                    'Update',
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
                 ),
-                margin: EdgeInsets.only(top: 50, bottom: 50),
               ),
             ],
           ),
-          padding: EdgeInsets.only(left: 15, right: 15),
         ),
 
         // Loading
-        Positioned(child: isLoading ? LoadingView() : SizedBox.shrink()),
+        Positioned(child: isLoading ? LoadingView() : const SizedBox.shrink()),
       ],
     );
   }
