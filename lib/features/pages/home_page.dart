@@ -4,19 +4,17 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_chat_demo/core/constants/app_text_style.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
-
 import '../../core/constants/color_constants.dart';
 import '../../core/constants/firestore_constants.dart';
 import '../../core/shared_widgets/loading_view.dart';
 import '../../core/utils/debouncer.dart';
 import '../../core/utils/utilities.dart';
 import '../models/_models_exports.dart';
-
 import '../providers/auth_provider.dart';
 import '../providers/home_provider.dart';
 import '_pages_exports.dart';
@@ -37,7 +35,7 @@ class HomePageState extends State<HomePage> {
   final ScrollController listScrollController = ScrollController();
 
   int _limit = 20;
-  int _limitIncrement = 20;
+  final int _limitIncrement = 20;
   String _textSearch = "";
   bool isLoading = false;
 
@@ -154,6 +152,68 @@ class HomePageState extends State<HomePage> {
     return Future.value(false);
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Message',
+          style: TextStyle(color: ColorHelper.white),
+        ),
+        elevation: 0,
+        centerTitle: true,
+        actions: [
+          buildPopupMenu(),
+        ],
+      ),
+      body: WillPopScope(
+        onWillPop: onBackPress,
+        child: Stack(
+          children: [
+            // List
+            Column(
+              children: [
+                buildSearchBar(),
+                Expanded(
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: homeProvider.getStreamFireStore(FirestoreConstants.pathUserCollection, _limit, _textSearch),
+                    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.hasData) {
+                        if ((snapshot.data?.docs.length ?? 0) > 0) {
+                          return ListView.builder(
+                            padding: const EdgeInsets.all(10),
+                            itemBuilder: (context, index) => buildItem(context, snapshot.data?.docs[index]),
+                            itemCount: snapshot.data?.docs.length,
+                            controller: listScrollController,
+                          );
+                        } else {
+                          return const Center(
+                            child: Text("No users"),
+                          );
+                        }
+                      } else {
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            color: ColorHelper.themeColor,
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+
+            // Loading
+            Positioned(
+              child: isLoading ? const LoadingView() : const SizedBox.shrink(),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   Future<void> openDialog() async {
     switch (await showDialog(
         context: context,
@@ -243,68 +303,6 @@ class HomePageState extends State<HomePage> {
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => LoginPage()),
       (Route<dynamic> route) => false,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Message',
-          style: TextStyle(color: ColorHelper.white),
-        ),
-        elevation: 0,
-        centerTitle: true,
-        actions: [
-          buildPopupMenu(),
-        ],
-      ),
-      body: WillPopScope(
-        onWillPop: onBackPress,
-        child: Stack(
-          children: [
-            // List
-            Column(
-              children: [
-                buildSearchBar(),
-                Expanded(
-                  child: StreamBuilder<QuerySnapshot>(
-                    stream: homeProvider.getStreamFireStore(FirestoreConstants.pathUserCollection, _limit, _textSearch),
-                    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                      if (snapshot.hasData) {
-                        if ((snapshot.data?.docs.length ?? 0) > 0) {
-                          return ListView.builder(
-                            padding: const EdgeInsets.all(10),
-                            itemBuilder: (context, index) => buildItem(context, snapshot.data?.docs[index]),
-                            itemCount: snapshot.data?.docs.length,
-                            controller: listScrollController,
-                          );
-                        } else {
-                          return const Center(
-                            child: Text("No users"),
-                          );
-                        }
-                      } else {
-                        return const Center(
-                          child: CircularProgressIndicator(
-                            color: ColorHelper.themeColor,
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                ),
-              ],
-            ),
-
-            // Loading
-            Positioned(
-              child: isLoading ? const LoadingView() : const SizedBox.shrink(),
-            )
-          ],
-        ),
-      ),
     );
   }
 
@@ -406,6 +404,7 @@ class HomePageState extends State<HomePage> {
             if (Utilities.isKeyboardShowing()) {
               Utilities.closeKeyboard(context);
             }
+
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -422,7 +421,7 @@ class HomePageState extends State<HomePage> {
           child: Container(
             height: 60,
             decoration: const BoxDecoration(
-              color: Colors.yellow,
+              // color: Colors.yellow,
               border: Border(
                 bottom: BorderSide(
                   color: ColorHelper.greyDarkColor,
@@ -478,20 +477,20 @@ class HomePageState extends State<HomePage> {
                       children: [
                         Container(
                           alignment: Alignment.centerLeft,
-                          margin: const EdgeInsets.fromLTRB(10, 0, 0, 5),
+                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 5),
                           child: Text(
                             userChat.nickname,
                             maxLines: 1,
-                            style: const TextStyle(color: ColorHelper.secondaryColor),
+                            style: AppTextStyles.bold16px,
                           ),
                         ),
                         Container(
                           alignment: Alignment.centerLeft,
-                          margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                          child: Text(
-                            'About me: ${userChat.aboutMe}',
+                          margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: const Text(
+                            'Last Message ',
                             maxLines: 1,
-                            style: const TextStyle(color: ColorHelper.secondaryColor),
+                            style: TextStyle(color: ColorHelper.greyDarkColor),
                           ),
                         )
                       ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_demo/core/utils/screen_size.dart';
 import 'package:flutter_chat_demo/features/providers/_providers_exports.dart';
 
 import 'package:provider/provider.dart';
@@ -18,7 +19,6 @@ class SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 1), () {
-      // just delay for showing this slash page clearer because it too fast
       checkSignedIn();
     });
   }
@@ -30,19 +30,20 @@ class SplashPageState extends State<SplashPage> {
       // ignore: use_build_context_synchronously
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => const HomePage()),
       );
       return;
     }
     // ignore: use_build_context_synchronously
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
+      MaterialPageRoute(builder: (context) => const LoginPage()),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    ScreenSize.init(context);
     return Scaffold(
       body: Center(
         child: Column(

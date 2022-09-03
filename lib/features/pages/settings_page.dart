@@ -1,17 +1,14 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_demo/core/constants/app_constants.dart';
+import 'package:flutter_chat_demo/core/constants/app_text_style.dart';
 import 'package:flutter_chat_demo/features/models/_models_exports.dart';
-
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-
 import '../../core/constants/color_constants.dart';
 import '../../core/constants/firestore_constants.dart';
 import '../../core/shared_widgets/loading_view.dart';
@@ -24,12 +21,18 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          AppConstants.settingsTitle,
-          style: TextStyle(color: ColorHelper.primaryColor),
-        ),
-        centerTitle: true,
-      ),
+          title: const Text(
+            AppConstants.settingsTitle,
+            style: TextStyle(color: ColorHelper.white),
+          ),
+          centerTitle: true,
+          leading: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: ColorHelper.white,
+            ),
+          )),
       body: const SettingsPageState(),
     );
   }
@@ -176,28 +179,27 @@ class SettingsPageStateState extends State<SettingsPageState> {
               CupertinoButton(
                 onPressed: getImage,
                 child: Container(
-                  margin: const EdgeInsets.all(20),
                   child: avatarImageFile == null
                       ? photoUrl.isNotEmpty
                           ? ClipRRect(
-                              borderRadius: BorderRadius.circular(45),
+                              borderRadius: BorderRadius.circular(100),
                               child: Image.network(
                                 photoUrl,
                                 fit: BoxFit.cover,
-                                width: 90,
-                                height: 90,
+                                width: 150,
+                                height: 150,
                                 errorBuilder: (context, object, stackTrace) {
                                   return const Icon(
                                     Icons.account_circle,
-                                    size: 90,
+                                    size: 150,
                                     color: ColorHelper.greyColor,
                                   );
                                 },
                                 loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                                   if (loadingProgress == null) return child;
                                   return SizedBox(
-                                    width: 90,
-                                    height: 90,
+                                    width: 150,
+                                    height: 150,
                                     child: Center(
                                       child: CircularProgressIndicator(
                                         color: ColorHelper.themeColor,
@@ -213,19 +215,23 @@ class SettingsPageStateState extends State<SettingsPageState> {
                             )
                           : const Icon(
                               Icons.account_circle,
-                              size: 90,
+                              size: 150,
                               color: ColorHelper.greyColor,
                             )
                       : ClipRRect(
-                          borderRadius: BorderRadius.circular(45),
+                          borderRadius: BorderRadius.circular(100),
                           child: Image.file(
                             avatarImageFile!,
-                            width: 90,
-                            height: 90,
+                            width: 150,
+                            height: 150,
                             fit: BoxFit.cover,
                           ),
                         ),
                 ),
+              ),
+              Text(
+                'Profile Picture',
+                style: AppTextStyles.bold16px.copyWith(color: ColorHelper.primaryColor),
               ),
 
               // Input
@@ -235,10 +241,9 @@ class SettingsPageStateState extends State<SettingsPageState> {
                   // Username
                   Container(
                     margin: const EdgeInsets.only(left: 10, bottom: 5, top: 10),
-                    child: const Text(
+                    child: Text(
                       'Nickname',
-                      style: TextStyle(
-                          fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: ColorHelper.primaryColor),
+                      style: AppTextStyles.bold16px.copyWith(color: ColorHelper.primaryColor),
                     ),
                   ),
                   Container(
@@ -263,10 +268,9 @@ class SettingsPageStateState extends State<SettingsPageState> {
                   // About me
                   Container(
                     margin: const EdgeInsets.only(left: 10, top: 30, bottom: 5),
-                    child: const Text(
+                    child: Text(
                       'About me',
-                      style: TextStyle(
-                          fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: ColorHelper.primaryColor),
+                      style: AppTextStyles.bold16px.copyWith(color: ColorHelper.primaryColor),
                     ),
                   ),
                   Container(
@@ -275,7 +279,7 @@ class SettingsPageStateState extends State<SettingsPageState> {
                       data: Theme.of(context).copyWith(primaryColor: ColorHelper.primaryColor),
                       child: TextField(
                         decoration: const InputDecoration(
-                          hintText: 'Fun, like travel and play PES...',
+                          hintText: 'Write something...',
                           contentPadding: EdgeInsets.all(5),
                           hintStyle: TextStyle(color: ColorHelper.greyColor),
                         ),
