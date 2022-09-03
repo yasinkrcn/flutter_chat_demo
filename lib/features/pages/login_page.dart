@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_demo/constants/app_constants.dart';
-import 'package:flutter_chat_demo/constants/color_constants.dart';
-import 'package:flutter_chat_demo/providers/auth_provider.dart';
+import 'package:flutter_chat_demo/core/constants/app_constants.dart';
+import 'package:flutter_chat_demo/features/providers/_providers_exports.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/widgets.dart';
-import '_exports_pages.dart';
+import '../../core/constants/color_constants.dart';
+import '../../core/shared_widgets/loading_view.dart';
+import '_pages_exports.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key? key}) : super(key: key);
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   LoginPageState createState() => LoginPageState();
@@ -34,7 +35,7 @@ class LoginPageState extends State<LoginPage> {
     }
     return Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             AppConstants.loginTitle,
             style: TextStyle(color: ColorHelper.primaryColor),
           ),
@@ -47,35 +48,36 @@ class LoginPageState extends State<LoginPage> {
                 onPressed: () async {
                   bool isSuccess = await authProvider.handleSignIn();
                   if (isSuccess) {
+                    // ignore: use_build_context_synchronously
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => HomePage(),
+                        builder: (context) => const HomePage(),
                       ),
                     );
                   }
                 },
-                child: Text(
-                  'Sign in with Google',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.resolveWith<Color>(
                     (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed)) return Color(0xffdd4b39).withOpacity(0.8);
-                      return Color(0xffdd4b39);
+                      if (states.contains(MaterialState.pressed)) return const Color(0xffdd4b39).withOpacity(0.8);
+                      return const Color(0xffdd4b39);
                     },
                   ),
                   splashFactory: NoSplash.splashFactory,
                   padding: MaterialStateProperty.all<EdgeInsets>(
-                    EdgeInsets.fromLTRB(30, 15, 30, 15),
+                    const EdgeInsets.fromLTRB(30, 15, 30, 15),
                   ),
+                ),
+                child: const Text(
+                  'Sign in with Google',
+                  style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
               ),
             ),
             // Loading
             Positioned(
-              child: authProvider.status == Status.authenticating ? LoadingView() : SizedBox.shrink(),
+              child: authProvider.status == Status.authenticating ? const LoadingView() : const SizedBox.shrink(),
             ),
           ],
         ));

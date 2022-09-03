@@ -5,15 +5,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_demo/constants/app_constants.dart';
-import 'package:flutter_chat_demo/constants/color_constants.dart';
-import 'package:flutter_chat_demo/constants/constants.dart';
-import 'package:flutter_chat_demo/models/models.dart';
-import 'package:flutter_chat_demo/providers/providers.dart';
-import 'package:flutter_chat_demo/widgets/loading_view.dart';
+import 'package:flutter_chat_demo/core/constants/app_constants.dart';
+import 'package:flutter_chat_demo/features/models/_models_exports.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+
+import '../../core/constants/color_constants.dart';
+import '../../core/constants/firestore_constants.dart';
+import '../../core/shared_widgets/loading_view.dart';
+import '../providers/setting_provider.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -310,7 +312,7 @@ class SettingsPageStateState extends State<SettingsPageState> {
         ),
 
         // Loading
-        Positioned(child: isLoading ? LoadingView() : const SizedBox.shrink()),
+        Positioned(child: isLoading ? const LoadingView() : const SizedBox.shrink()),
       ],
     );
   }
