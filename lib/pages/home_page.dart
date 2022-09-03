@@ -162,23 +162,23 @@ class HomePageState extends State<HomePage> {
             children: <Widget>[
               Container(
                 color: ColorHelper.themeColor,
-                padding: EdgeInsets.only(bottom: 10, top: 10),
+                padding: const EdgeInsets.only(bottom: 10, top: 10),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Container(
-                      child: Icon(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      child: const Icon(
                         Icons.exit_to_app,
                         size: 30,
                         color: Colors.white,
                       ),
-                      margin: EdgeInsets.only(bottom: 10),
                     ),
-                    Text(
+                    const Text(
                       'Exit app',
                       style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    Text(
+                    const Text(
                       'Are you sure to exit app?',
                       style: TextStyle(color: Colors.white70, fontSize: 14),
                     ),
@@ -190,15 +190,15 @@ class HomePageState extends State<HomePage> {
                   Navigator.pop(context, 0);
                 },
                 child: Row(
-                  children: <Widget>[
+                  children: [
                     Container(
-                      child: Icon(
+                      margin: const EdgeInsets.only(right: 10),
+                      child: const Icon(
                         Icons.cancel,
                         color: ColorHelper.primaryColor,
                       ),
-                      margin: EdgeInsets.only(right: 10),
                     ),
-                    Text(
+                    const Text(
                       'Cancel',
                       style: TextStyle(color: ColorHelper.primaryColor, fontWeight: FontWeight.bold),
                     )
@@ -210,15 +210,15 @@ class HomePageState extends State<HomePage> {
                   Navigator.pop(context, 1);
                 },
                 child: Row(
-                  children: <Widget>[
+                  children: [
                     Container(
-                      child: Icon(
+                      margin: const EdgeInsets.only(right: 10),
+                      child: const Icon(
                         Icons.check_circle,
                         color: ColorHelper.primaryColor,
                       ),
-                      margin: EdgeInsets.only(right: 10),
                     ),
-                    Text(
+                    const Text(
                       'Yes',
                       style: TextStyle(color: ColorHelper.primaryColor, fontWeight: FontWeight.bold),
                     )
@@ -247,16 +247,17 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           AppConstants.homeTitle,
           style: TextStyle(color: ColorHelper.primaryColor),
         ),
         centerTitle: true,
-        actions: <Widget>[buildPopupMenu()],
+        actions: [buildPopupMenu()],
       ),
       body: WillPopScope(
+        onWillPop: onBackPress,
         child: Stack(
-          children: <Widget>[
+          children: [
             // List
             Column(
               children: [
@@ -268,18 +269,18 @@ class HomePageState extends State<HomePage> {
                       if (snapshot.hasData) {
                         if ((snapshot.data?.docs.length ?? 0) > 0) {
                           return ListView.builder(
-                            padding: EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10),
                             itemBuilder: (context, index) => buildItem(context, snapshot.data?.docs[index]),
                             itemCount: snapshot.data?.docs.length,
                             controller: listScrollController,
                           );
                         } else {
-                          return Center(
+                          return const Center(
                             child: Text("No users"),
                           );
                         }
                       } else {
-                        return Center(
+                        return const Center(
                           child: CircularProgressIndicator(
                             color: ColorHelper.themeColor,
                           ),
@@ -293,11 +294,10 @@ class HomePageState extends State<HomePage> {
 
             // Loading
             Positioned(
-              child: isLoading ? LoadingView() : SizedBox.shrink(),
+              child: isLoading ? LoadingView() : const SizedBox.shrink(),
             )
           ],
         ),
-        onWillPop: onBackPress,
       ),
     );
   }
@@ -305,11 +305,17 @@ class HomePageState extends State<HomePage> {
   Widget buildSearchBar() {
     return Container(
       height: 40,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: ColorHelper.greyColor2,
+      ),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+      margin: const EdgeInsets.fromLTRB(16, 8, 16, 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(Icons.search, color: ColorHelper.greyColor, size: 20),
-          SizedBox(width: 5),
+          const Icon(Icons.search, color: ColorHelper.greyColor, size: 20),
+          const SizedBox(width: 5),
           Expanded(
             child: TextFormField(
               textInputAction: TextInputAction.search,
@@ -329,11 +335,11 @@ class HomePageState extends State<HomePage> {
                   }
                 });
               },
-              decoration: InputDecoration.collapsed(
+              decoration: const InputDecoration.collapsed(
                 hintText: 'Search nickname (you have to type exactly string)',
                 hintStyle: TextStyle(fontSize: 13, color: ColorHelper.greyColor),
               ),
-              style: TextStyle(fontSize: 13),
+              style: const TextStyle(fontSize: 13),
             ),
           ),
           StreamBuilder<bool>(
@@ -348,17 +354,11 @@ class HomePageState extends State<HomePage> {
                             _textSearch = "";
                           });
                         },
-                        child: Icon(Icons.clear_rounded, color: ColorHelper.greyColor, size: 20))
-                    : SizedBox.shrink();
+                        child: const Icon(Icons.clear_rounded, color: ColorHelper.greyColor, size: 20))
+                    : const SizedBox.shrink();
               }),
         ],
       ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: ColorHelper.greyColor2,
-      ),
-      padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-      margin: EdgeInsets.fromLTRB(16, 8, 16, 8),
     );
   }
 
@@ -380,7 +380,7 @@ class HomePageState extends State<HomePage> {
                   ),
                   Text(
                     choice.title,
-                    style: TextStyle(color: ColorHelper.primaryColor),
+                    style: const TextStyle(color: ColorHelper.primaryColor),
                   ),
                 ],
               ));
@@ -393,79 +393,11 @@ class HomePageState extends State<HomePage> {
     if (document != null) {
       UserChat userChat = UserChat.fromDocument(document);
       if (userChat.id == currentUserId) {
-        return SizedBox.shrink();
+        return const SizedBox.shrink();
       } else {
         return Container(
+          margin: const EdgeInsets.only(bottom: 10, left: 5, right: 5),
           child: TextButton(
-            child: Row(
-              children: <Widget>[
-                Material(
-                  child: userChat.photoUrl.isNotEmpty
-                      ? Image.network(
-                          userChat.photoUrl,
-                          fit: BoxFit.cover,
-                          width: 50,
-                          height: 50,
-                          loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Container(
-                              width: 50,
-                              height: 50,
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                  color: ColorHelper.themeColor,
-                                  value: loadingProgress.expectedTotalBytes != null
-                                      ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                                      : null,
-                                ),
-                              ),
-                            );
-                          },
-                          errorBuilder: (context, object, stackTrace) {
-                            return Icon(
-                              Icons.account_circle,
-                              size: 50,
-                              color: ColorHelper.greyColor,
-                            );
-                          },
-                        )
-                      : Icon(
-                          Icons.account_circle,
-                          size: 50,
-                          color: ColorHelper.greyColor,
-                        ),
-                  borderRadius: BorderRadius.all(Radius.circular(25)),
-                  clipBehavior: Clip.hardEdge,
-                ),
-                Flexible(
-                  child: Container(
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          child: Text(
-                            'Nickname: ${userChat.nickname}',
-                            maxLines: 1,
-                            style: TextStyle(color: ColorHelper.primaryColor),
-                          ),
-                          alignment: Alignment.centerLeft,
-                          margin: EdgeInsets.fromLTRB(10, 0, 0, 5),
-                        ),
-                        Container(
-                          child: Text(
-                            'About me: ${userChat.aboutMe}',
-                            maxLines: 1,
-                            style: TextStyle(color: ColorHelper.primaryColor),
-                          ),
-                          alignment: Alignment.centerLeft,
-                          margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        )
-                      ],
-                    ),
-                    margin: EdgeInsets.only(left: 20),
-                  ),
-                ),
-              ],
-            ),
             onPressed: () {
               if (Utilities.isKeyboardShowing()) {
                 Utilities.closeKeyboard(context);
@@ -486,17 +418,85 @@ class HomePageState extends State<HomePage> {
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(ColorHelper.greyColor2),
               shape: MaterialStateProperty.all<OutlinedBorder>(
-                RoundedRectangleBorder(
+                const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
               ),
             ),
+            child: Row(
+              children: [
+                Material(
+                  borderRadius: const BorderRadius.all(Radius.circular(25)),
+                  clipBehavior: Clip.hardEdge,
+                  child: userChat.photoUrl.isNotEmpty
+                      ? Image.network(
+                          userChat.photoUrl,
+                          fit: BoxFit.cover,
+                          width: 50,
+                          height: 50,
+                          loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  color: ColorHelper.themeColor,
+                                  value: loadingProgress.expectedTotalBytes != null
+                                      ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                      : null,
+                                ),
+                              ),
+                            );
+                          },
+                          errorBuilder: (context, object, stackTrace) {
+                            return const Icon(
+                              Icons.account_circle,
+                              size: 50,
+                              color: ColorHelper.greyColor,
+                            );
+                          },
+                        )
+                      : const Icon(
+                          Icons.account_circle,
+                          size: 50,
+                          color: ColorHelper.greyColor,
+                        ),
+                ),
+                Flexible(
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 20),
+                    child: Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          margin: const EdgeInsets.fromLTRB(10, 0, 0, 5),
+                          child: Text(
+                            'Nickname: ${userChat.nickname}',
+                            maxLines: 1,
+                            style: const TextStyle(color: ColorHelper.primaryColor),
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          child: Text(
+                            'About me: ${userChat.aboutMe}',
+                            maxLines: 1,
+                            style: const TextStyle(color: ColorHelper.primaryColor),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-          margin: EdgeInsets.only(bottom: 10, left: 5, right: 5),
         );
       }
     } else {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
   }
 }

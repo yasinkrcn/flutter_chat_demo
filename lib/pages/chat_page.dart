@@ -189,92 +189,95 @@ class ChatPageState extends State<ChatPage> {
                 : messageChat.type == TypeMessage.image
                     // Image
                     ? Container(
-                        height: 225,
+                        margin: const EdgeInsets.all(8),
+                        height: 228,
                         width: 200,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: ColorHelper.primaryColor,
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(3),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Container(
-                                // margin: const EdgeInsets.all(3),
-                                child: OutlinedButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => FullPhotoPage(
-                                          url: messageChat.content,
-                                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.all(3),
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => FullPhotoPage(
+                                        url: messageChat.content,
                                       ),
-                                    );
-                                  },
-                                  style: ButtonStyle(
-                                      padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(0))),
-                                  child: Material(
-                                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                                    clipBehavior: Clip.hardEdge,
-                                    child: Image.network(
-                                      messageChat.content,
-                                      loadingBuilder:
-                                          (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                                        if (loadingProgress == null) return child;
-                                        return Container(
-                                          decoration: const BoxDecoration(
-                                            color: ColorHelper.greyColor2,
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(8),
-                                            ),
-                                          ),
-                                          width: 200,
-                                          height: 200,
-                                          child: Center(
-                                            child: CircularProgressIndicator(
-                                              color: ColorHelper.themeColor,
-                                              value: loadingProgress.expectedTotalBytes != null
-                                                  ? loadingProgress.cumulativeBytesLoaded /
-                                                      loadingProgress.expectedTotalBytes!
-                                                  : null,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      errorBuilder: (context, object, stackTrace) {
-                                        return Material(
-                                          borderRadius: const BorderRadius.all(
+                                    ),
+                                  );
+                                },
+                                style: ButtonStyle(
+                                    padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(0))),
+                                child: Material(
+                                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                  clipBehavior: Clip.hardEdge,
+                                  child: Image.network(
+                                    messageChat.content,
+                                    loadingBuilder:
+                                        (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Container(
+                                        decoration: const BoxDecoration(
+                                          color: ColorHelper.greyColor2,
+                                          borderRadius: BorderRadius.all(
                                             Radius.circular(8),
                                           ),
-                                          clipBehavior: Clip.hardEdge,
-                                          child: Image.asset(
-                                            'images/img_not_available.jpeg',
-                                            width: 200,
-                                            height: 200,
-                                            fit: BoxFit.cover,
+                                        ),
+                                        width: 200,
+                                        height: 200,
+                                        child: Center(
+                                          child: CircularProgressIndicator(
+                                            color: ColorHelper.themeColor,
+                                            value: loadingProgress.expectedTotalBytes != null
+                                                ? loadingProgress.cumulativeBytesLoaded /
+                                                    loadingProgress.expectedTotalBytes!
+                                                : null,
                                           ),
-                                        );
-                                      },
-                                      width: 200,
-                                      height: 200,
-                                      fit: BoxFit.cover,
-                                    ),
+                                        ),
+                                      );
+                                    },
+                                    errorBuilder: (context, object, stackTrace) {
+                                      return Material(
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(8),
+                                        ),
+                                        clipBehavior: Clip.hardEdge,
+                                        child: Image.asset(
+                                          'images/img_not_available.jpeg',
+                                          width: 200,
+                                          height: 200,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      );
+                                    },
+                                    width: 200,
+                                    height: 200,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
-                              Text(
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8, bottom: 2),
+                              child: Text(
                                 DateFormat('kk:mm').format(
                                   DateTime.fromMillisecondsSinceEpoch(
                                     int.parse(messageChat.timestamp),
                                   ),
                                 ),
                                 style: const TextStyle(color: ColorHelper.white, fontSize: 10),
-                              )
-                            ],
-                          ),
+                              ),
+                            )
+                          ],
                         ),
                       )
                     // Sticker
@@ -335,7 +338,7 @@ class ChatPageState extends State<ChatPage> {
                           padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                           width: 200,
                           decoration:
-                              BoxDecoration(color: ColorHelper.primaryColor, borderRadius: BorderRadius.circular(8)),
+                              BoxDecoration(color: ColorHelper.secondaryColor, borderRadius: BorderRadius.circular(8)),
                           margin: const EdgeInsets.only(left: 10),
                           child: Text(
                             messageChat.content,
@@ -486,9 +489,6 @@ class ChatPageState extends State<ChatPage> {
               children: <Widget>[
                 // List of messages
                 buildListMessage(),
-
-                // // Sticker
-                // isShowSticker ? buildSticker() : const SizedBox.shrink(),
 
                 // Input content
                 buildInput(),
