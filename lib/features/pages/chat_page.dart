@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_demo/core/shared_widgets/app_text_form_field.dart';
+import 'package:flutter_chat_demo/core/shared_widgets/remove_focus_and_bottom_top_padding_container.dart';
 import 'package:flutter_chat_demo/features/models/_models_exports.dart';
 import 'package:flutter_chat_demo/features/providers/chat_provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -166,21 +167,23 @@ class ChatPageState extends State<ChatPage> {
       ),
       body: WillPopScope(
         onWillPop: onBackPress,
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                // List of messages
-                buildListMessage(),
+        child: AppContainer(
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  // List of messages
+                  buildListMessage(),
 
-                // Input content
-                buildInput(),
-              ],
-            ),
+                  // Input content
+                  buildInput(),
+                ],
+              ),
 
-            // Loading
-            buildLoading()
-          ],
+              // Loading
+              buildLoading()
+            ],
+          ),
         ),
       ),
     );
