@@ -24,6 +24,14 @@ class ChatPage extends StatefulWidget {
   ChatPageState createState() => ChatPageState();
 }
 
+class ChatPageArguments {
+  final String peerId;
+  final String peerAvatar;
+  final String peerNickname;
+
+  ChatPageArguments({required this.peerId, required this.peerAvatar, required this.peerNickname});
+}
+
 class ChatPageState extends State<ChatPage> {
   late String currentUserId;
 
@@ -31,16 +39,12 @@ class ChatPageState extends State<ChatPage> {
   int _limit = 20;
   final int _limitIncrement = 20;
   String groupChatId = "";
-
   File? imageFile;
   bool isLoading = false;
-
   String imageUrl = "";
-
   final TextEditingController textEditingController = TextEditingController();
   final ScrollController listScrollController = ScrollController();
   final FocusNode focusNode = FocusNode();
-
   late ChatProvider chatProvider;
   late AuthProvider authProvider;
 
@@ -194,18 +198,22 @@ class ChatPageState extends State<ChatPage> {
                 // Text
                 ? Container(
                     padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                    decoration: BoxDecoration(color: ColorHelper.primaryColor, borderRadius: BorderRadius.circular(8)),
+                    decoration: BoxDecoration(
+                      color: ColorHelper.primaryColor,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                     margin: EdgeInsets.only(bottom: isLastMessageRight(index) ? 20 : 10, right: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(
-                          messageChat.content,
-                          style: const TextStyle(color: ColorHelper.white, fontSize: 16),
-                          maxLines: 4,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.justify,
+                        Container(
+                          constraints: const BoxConstraints(maxWidth: 200),
+                          child: Text(
+                            messageChat.content,
+                            style: const TextStyle(color: ColorHelper.white, fontSize: 16),
+                            textAlign: TextAlign.justify,
+                          ),
                         ),
                         const SizedBox(
                           width: 8,
@@ -315,16 +323,7 @@ class ChatPageState extends State<ChatPage> {
                           ],
                         ),
                       )
-                    // Sticker
-                    : Container(
-                        margin: EdgeInsets.only(bottom: isLastMessageRight(index) ? 20 : 10, right: 10),
-                        child: Image.asset(
-                          'images/${messageChat.content}.gif',
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                    : const SizedBox.shrink()
           ],
         );
       } else {
@@ -427,18 +426,19 @@ class ChatPageState extends State<ChatPage> {
                                         left: 170,
                                         child: Container(
                                           decoration: BoxDecoration(
-                                              gradient: LinearGradient(
-                                            begin: Alignment.bottomCenter,
-                                            end: Alignment.topCenter,
-                                            stops: const [
-                                              0.5,
-                                              0.4,
-                                            ],
-                                            colors: [
-                                              Colors.black.withOpacity(.2),
-                                              Colors.transparent,
-                                            ],
-                                          )),
+                                            gradient: LinearGradient(
+                                              begin: Alignment.bottomCenter,
+                                              end: Alignment.topCenter,
+                                              stops: const [
+                                                0.5,
+                                                0.4,
+                                              ],
+                                              colors: [
+                                                Colors.black.withOpacity(.2),
+                                                Colors.transparent,
+                                              ],
+                                            ),
+                                          ),
                                           child: Text(
                                             DateFormat('kk:mm').format(
                                               DateTime.fromMillisecondsSinceEpoch(
@@ -457,17 +457,6 @@ class ChatPageState extends State<ChatPage> {
                           : const SizedBox.shrink(),
                 ],
               ),
-
-              // Time
-              isLastMessageLeft(index)
-                  ? Container(
-                      margin: const EdgeInsets.only(left: 50, top: 5, bottom: 5),
-                      // child: Text(
-
-                      //   style: const TextStyle(color: ColorHelper.greyColor, fontSize: 12, fontStyle: FontStyle.italic),
-                      // ),
-                    )
-                  : const SizedBox.shrink()
             ],
           ),
         );
@@ -512,8 +501,8 @@ class ChatPageState extends State<ChatPage> {
 
   Widget buildInput() {
     return Container(
-      width: double.infinity,
       height: 50,
+      width: double.infinity,
       decoration: const BoxDecoration(
           border: Border(top: BorderSide(color: ColorHelper.backgroundColor, width: 0.5)),
           color: ColorHelper.backgroundColor),
@@ -588,12 +577,4 @@ class ChatPageState extends State<ChatPage> {
             ),
     );
   }
-}
-
-class ChatPageArguments {
-  final String peerId;
-  final String peerAvatar;
-  final String peerNickname;
-
-  ChatPageArguments({required this.peerId, required this.peerAvatar, required this.peerNickname});
 }

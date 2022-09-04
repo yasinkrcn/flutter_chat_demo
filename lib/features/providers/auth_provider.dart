@@ -34,12 +34,12 @@ class AuthProvider extends ChangeNotifier {
   });
 
   String? getUserFirebaseId() {
-    return prefs.getString(FirestoreConstants.id);
+    return prefs.getString("id");
   }
 
   Future<bool> isLoggedIn() async {
     bool isLoggedIn = await googleSignIn.isSignedIn();
-    if (isLoggedIn && prefs.getString(FirestoreConstants.id)?.isNotEmpty == true) {
+    if (isLoggedIn && prefs.getString("id")?.isNotEmpty == true) {
       return true;
     } else {
       return false;
@@ -66,30 +66,30 @@ class AuthProvider extends ChangeNotifier {
             .where(FirestoreConstants.id, isEqualTo: firebaseUser.uid)
             .get();
         final List<DocumentSnapshot> documents = result.docs;
-        if (documents.length == 0) {
+        if (documents.isEmpty) {
           // Writing data to server because here is a new user
-          firebaseFirestore.collection(FirestoreConstants.pathUserCollection).doc(firebaseUser.uid).set({
-            FirestoreConstants.nickname: firebaseUser.displayName,
-            FirestoreConstants.photoUrl: firebaseUser.photoURL,
-            FirestoreConstants.id: firebaseUser.uid,
+          firebaseFirestore.collection("users").doc(firebaseUser.uid).set({
+            "nickname": firebaseUser.displayName,
+            "photoUrl": firebaseUser.photoURL,
+            "id": firebaseUser.uid,
             'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
-            FirestoreConstants.chattingWith: null
+            "chattingWith": null
           });
 
           // Write data to local storage
           User? currentUser = firebaseUser;
-          await prefs.setString(FirestoreConstants.id, currentUser.uid);
-          await prefs.setString(FirestoreConstants.nickname, currentUser.displayName ?? "");
-          await prefs.setString(FirestoreConstants.photoUrl, currentUser.photoURL ?? "");
+          await prefs.setString("id", currentUser.uid);
+          await prefs.setString("nickname", currentUser.displayName ?? "");
+          await prefs.setString("photoUrl", currentUser.photoURL ?? "");
         } else {
           // Already sign up, just get data from firestore
           DocumentSnapshot documentSnapshot = documents[0];
           UserChat userChat = UserChat.fromDocument(documentSnapshot);
           // Write data to local
-          await prefs.setString(FirestoreConstants.id, userChat.id);
-          await prefs.setString(FirestoreConstants.nickname, userChat.nickname);
-          await prefs.setString(FirestoreConstants.photoUrl, userChat.photoUrl);
-          await prefs.setString(FirestoreConstants.aboutMe, userChat.aboutMe);
+          await prefs.setString("id", userChat.id);
+          await prefs.setString("nickname", userChat.nickname);
+          await prefs.setString("photoUrl", userChat.photoUrl);
+          await prefs.setString("aboutMe", userChat.aboutMe);
         }
         _status = Status.authenticated;
         notifyListeners();

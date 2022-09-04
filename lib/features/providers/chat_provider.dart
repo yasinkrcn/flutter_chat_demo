@@ -1,11 +1,7 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../core/constants/firestore_constants.dart';
 import '../models/_models_exports.dart';
 
 class ChatProvider {
@@ -31,17 +27,17 @@ class ChatProvider {
 
   Stream<QuerySnapshot> getChatStream(String groupChatId, int limit) {
     return firebaseFirestore
-        .collection(FirestoreConstants.pathMessageCollection)
+        .collection("messages")
         .doc(groupChatId)
         .collection(groupChatId)
-        .orderBy(FirestoreConstants.timestamp, descending: true)
+        .orderBy("timestamp", descending: true)
         .limit(limit)
         .snapshots();
   }
 
   void sendMessage(String content, int type, String groupChatId, String currentUserId, String peerId) {
     DocumentReference documentReference = firebaseFirestore
-        .collection(FirestoreConstants.pathMessageCollection)
+        .collection("messages")
         .doc(groupChatId)
         .collection(groupChatId)
         .doc(DateTime.now().millisecondsSinceEpoch.toString());
@@ -66,5 +62,4 @@ class ChatProvider {
 class TypeMessage {
   static const text = 0;
   static const image = 1;
-  static const sticker = 2;
 }

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_demo/core/constants/color_constants.dart';
 import 'package:flutter_chat_demo/core/utils/screen_size.dart';
@@ -6,6 +8,7 @@ class AppTextFormField extends StatelessWidget {
   final String hintText;
   final TextEditingController? controller;
   double? height;
+  TextStyle? style;
 
   final Widget? prefixIcon;
   final Widget? suffixIcon;
@@ -17,6 +20,7 @@ class AppTextFormField extends StatelessWidget {
     required this.hintText,
     this.controller,
     this.height,
+    this.style,
     this.prefixIcon,
     this.suffixIcon,
     this.onTap,
@@ -66,6 +70,8 @@ class AppTextFormField extends StatelessWidget {
     Widget? prefixIcon,
     void Function()? onTap,
     double? height,
+    TextStyle? style,
+    final void Function(String)? onChanged,
   }) {
     return AppTextFormField._(
       controller: controller,
@@ -73,6 +79,8 @@ class AppTextFormField extends StatelessWidget {
       prefixIcon: prefixIcon,
       suffixIcon: suffixIcon,
       height: 40,
+      style: const TextStyle(color: ColorHelper.primaryColor, fontSize: 15),
+      onChanged: onChanged,
     );
   }
 
@@ -85,6 +93,7 @@ class AppTextFormField extends StatelessWidget {
         onChanged: onChanged,
         textAlignVertical: TextAlignVertical.bottom,
         controller: controller,
+        style: style,
         decoration: InputDecoration(
           hintText: hintText,
           prefixIcon: prefixIcon,
