@@ -280,7 +280,7 @@ class ChatPageState extends State<ChatPage> {
                                         ),
                                         clipBehavior: Clip.hardEdge,
                                         child: Image.asset(
-                                          'images/img_not_available.jpeg',
+                                          AssetsPath().imageNotAvailable,
                                           width: 200,
                                           height: 200,
                                           fit: BoxFit.cover,
@@ -402,7 +402,7 @@ class ChatPageState extends State<ChatPage> {
                                           ),
                                           clipBehavior: Clip.hardEdge,
                                           child: Image.asset(
-                                            'images/img_not_available.jpeg',
+                                            AssetsPath().imageNotAvailable,
                                             width: 200,
                                             height: 200,
                                             fit: BoxFit.cover,

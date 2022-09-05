@@ -8,4 +8,7 @@ class AssetsPath {
 
   // !SVG
   final String appIconSVG = 'assets/svg/message_icon.svg';
+
+  // !PNG
+  final String imageNotAvailable = 'assets/png/img_not_available.jpeg';
 }
