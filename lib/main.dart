@@ -1,17 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_chat_demo/core/constants/app_constants.dart';
-import 'package:flutter_chat_demo/core/constants/color_constants.dart';
-import 'package:flutter_chat_demo/features/providers/_providers_exports.dart';
-import 'package:flutter_chat_demo/firebase_options.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'features/pages/splash_page.dart';
+import 'core/_core_exports.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
