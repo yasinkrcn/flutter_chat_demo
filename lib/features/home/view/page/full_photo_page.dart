@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:photo_view/photo_view.dart';
-import '../../../../core/constants/color_constants.dart';
+import '../../../../core/_core_exports.dart';
 
 class FullPhotoPage extends StatelessWidget {
   final String? url;
@@ -11,21 +9,33 @@ class FullPhotoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: ColorHelper.white,
-          title: const Text(
-            'Photo',
-            style: TextStyle(color: ColorHelper.secondaryColor),
+        toolbarHeight: 0,
+      ),
+      body: Stack(
+        children: [
+          PhotoView(
+            imageProvider: NetworkImage(url!),
           ),
-          centerTitle: true,
-          leading: GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: ColorHelper.secondaryColor,
+          Positioned(
+            top: 15,
+            left: 15,
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: Colors.black.withOpacity(.3),
+                ),
+                child: const Icon(
+                  Icons.arrow_back_ios,
+                  color: ColorHelper.white,
+                ),
+              ),
             ),
-          )),
-      body: PhotoView(
-        imageProvider: NetworkImage(url!),
+          ),
+        ],
       ),
     );
   }

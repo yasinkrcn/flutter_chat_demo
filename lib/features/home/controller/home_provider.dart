@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_chat_demo/core/_core_exports.dart';
 
 class HomeProvider {
   final FirebaseFirestore firebaseFirestore;
